@@ -1,4 +1,4 @@
-name: sync-jd_scripts
+name: sync-repos
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ env:
   USE_SSH: false
   
 jobs:
-  build:
+  sync:
     runs-on: Ubuntu-20.04
     steps:
     
@@ -37,5 +37,5 @@ jobs:
       with:
         directory: master
         github_token: ${{ secrets.PAT }}
-        repository: test
+        repository: Namestars/test
         branch: master
