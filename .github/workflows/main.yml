@@ -5,6 +5,9 @@ on:
   #schedule:
     #- cron: '15 */2 * * *'
 
+env:
+  USE_SSH: false
+  
 jobs:
   build:
     runs-on: Ubuntu-20.04
@@ -18,7 +21,7 @@ jobs:
         git config --global user.email 'noreply@github.com'
         
     - name: Prepare
-      if: ${{ secrets.SSH_JD }}
+      if: env.USE_SSH == 'true'
       run: |
         mkdir -p ~/.ssh
         echo -e "${{ secrets.SSH_JD }}" > ~/.ssh/id_rsa
