@@ -1,13 +1,35 @@
-name: sync-repos
+#
+# Copyright (c) 2019-2021 Samuel <https://github.com/Ausaci>
+#
+# Description: Auto git clone repos and push to destination repo
+#
+# If you want to checkout the private repos, please add secrets in repo settings first:
+# 
+# For "svn checkout --force ${{ env.URL_PREFIX }}${{ env.DOWNLOAD_URL }} ${{ env.DOWNLOAD_PATH }} --username ${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }}"
+# ${{ secrets.USERNAME }}    ----    Github username
+# ${{ secrets.PASSWORD }}    ----    Github password
+#
+# For "curl -O ${{ env.URL_PREFIX }}${{ secrets.PAT }}@${{ env.DOWNLOAD_URL }}"
+# ${{ secrets.SOURCEPAT }}    ----    Github token [access for repo] <https://github.com/settings/tokens>
+#
+# For "git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ secrets.SOURCEPAT }}${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}"
+# ${{ secrets.SOURCEPAT }}    ----    Github token [access for repo] <https://github.com/settings/tokens>
+#
+# ${{ secrets.PAT }} is your DEST repo's access token
+#
+
+name: sync-repo-template
 
 on:
   workflow_dispatch:
   #schedule:
-    #- cron: '15 */2 * * *'
+    #- cron: '00 16 * * *'
 
 env:
+  TZ: Asia/Shanghai
   USE_SSH: false
-  SOURCE_REPO: https://github.com/chinnkarahoi/jd_scripts.git
+  URL_PREFIX: https://
+  SOURCE_REPO: github.com/chinnkarahoi/jd_scripts.git
   SOURCE_BRANCH: master
   DEST_REPO: Namestars/test
   DEST_BRANCH: master
@@ -15,13 +37,14 @@ env:
   
 jobs:
   sync:
-    runs-on: Ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     
-    - name: Init Build Dependencies
+    - name: Initial environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        sudo timedatectl set-timezone "$TZ"
         git config --global user.name 'GitHub Actions' 
         git config --global user.email 'noreply@github.com'
         
@@ -36,7 +59,7 @@ jobs:
         
     - name: Clone source repo
       run: |
-        git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
+        git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ secrets.SOURCEPAT }}${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
         
     - name: Push to destination repo
       uses: ad-m/github-push-action@master
