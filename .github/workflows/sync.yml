@@ -28,8 +28,8 @@ on:
 env:
   TZ: Asia/Shanghai
   USE_SSH: false
-  URL_PREFIX: https://
-  SOURCE_REPO: github.com/chinnkarahoi/jd_scripts.git
+  #URL_PREFIX: https://
+  SOURCE_REPO: git@gitee.com:lxk0301/jd_scripts.git
   SOURCE_BRANCH: master
   DEST_REPO: Namestars/test
   DEST_BRANCH: master
@@ -52,14 +52,14 @@ jobs:
       if: env.USE_SSH == 'true'
       run: |
         mkdir -p ~/.ssh
-        echo -e "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        echo -e "${{ secrets.SSH_KEY_JD }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan gitee.com > ~/.ssh/known_hosts
-        ssh-keyscan github.com > ~/.ssh/known_hosts
+        #ssh-keyscan github.com > ~/.ssh/known_hosts
         
     - name: Clone source repo
       run: |
-        git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ secrets.SOURCEPAT }}${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
+        git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
         
     - name: Push to destination repo
       uses: ad-m/github-push-action@master
