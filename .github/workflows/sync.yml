@@ -27,7 +27,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
-  USE_SSH: false
+  USE_SSH: true
   #URL_PREFIX: https://
   SOURCE_REPO: git@gitee.com:lxk0301/jd_scripts.git
   SOURCE_BRANCH: master
