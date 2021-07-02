@@ -34,7 +34,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           
       - name: git-sync-remote
-        uses: wei/git-sync@v3
+        uses: Ausaci/sync-ausaci@v1.0.0
         if: env.TOREMOTE == 'true'
         with:
           source_repo: "unifreq/openwrt_packit"
