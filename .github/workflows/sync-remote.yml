@@ -11,7 +11,7 @@ on:
 env:
   TZ: Asia/Shanghai
   TOCURRENT: false
-  TOREMOTE: ture
+  TOREMOTE: true
   
 jobs:
   repo-sync:
