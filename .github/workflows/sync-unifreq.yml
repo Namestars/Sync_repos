@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [openwrt_packit]
+        list: [openwrt_packit,arm64-kernel-configs]
         
     steps:  
       - uses: actions/checkout@v2
