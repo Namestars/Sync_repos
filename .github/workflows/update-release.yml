@@ -1,0 +1,84 @@
+# Ausaci CopyRight
+
+name: Upload2Armbian_Buster
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+#  schedule:
+#    - cron: 30 23 * * *
+#  release:
+#    types: published
+#  watch:
+#    types: started
+
+env:
+  UPLOAD_FILES: false
+  TZ: Asia/Shanghai
+  CURL_COMMAND: curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json" -fsSL 
+  OWNER: Namestars
+  REPO: Archives
+  TAG_BRANCH: main
+  TAG_NAME: your tag name
+  RELEASE_NAME: your release name
+
+jobs:
+  update-release:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    strategy:
+      fail-fast: false
+      matrix:
+        list:
+        - { release_name: "Repos", tag_name: "20210521_IPv6", url: "https://api.github.com/repos/Ausaci/Archives/releases/43324999" }
+
+    steps:
+      
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Download Files
+      id: download
+      run: |
+        sudo mkdir -p /workdir/downloads
+        sudo chmod 777 /workdir/downloads
+        cd /workdir/downloads
+        sudo wget -P /workdir/downloads/${{ matrix.list.release_name }} $(${{ env.CURL_COMMAND }} ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
+        echo -e $(${{ env.CURL_COMMAND }} ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) > /workdir/BODY_${{ matrix.list.release_name }}.txt
+        echo "::set-output name=status::success"
+        
+    - name: Organize Files
+      id: organize
+      if: steps.download.outputs.status == 'success' && !cancelled()
+      run: |
+        cd /workdir/downloads
+        echo "FILES=$PWD" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
+
+    - name: Upload Files
+      uses: actions/upload-artifact@master
+      if: env.UPLOAD_FILES == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.RELEASE_NAME }}
+        path: ${{ env.FILES }}
+
+    - name: Create release
+      id: release
+      uses: ncipollo/release-action@v1
+      with:
+        name: ${{ matrix.list.release_name }}
+        allowUpdates: true
+        owner: ${{ env.OWNER }}
+        repo: ${{ env.REPO }}
+        tag: ${{ matrix.list.tag_name }}
+        commit: ${{ env.TAG_BRANCH }}
+        token: ${{ secrets.RELEASES_TOKEN }}
+        #body: Body
+        bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.txt
+        artifacts: ${{ env.FILES }}/*
