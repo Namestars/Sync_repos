@@ -17,13 +17,13 @@ env:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
-    if: github.event.sender.id == "Ausaci" || github.event.repository.owner.id == github.event.sender.id
+    if: github.event.repository.owner.id == github.event.sender.id
     
     name: Sync ${{ matrix.list }}
     strategy:
       fail-fast: false
       matrix:
-        list: [openwrt_packit,arm64-kernel-configs]
+        list: [openwrt_packit,arm64-kernel-configs,libreoffice-headless,linux-5.4.y,linux-5.10.y,linux-5.12.y]
         
     steps:  
       - uses: actions/checkout@v2
