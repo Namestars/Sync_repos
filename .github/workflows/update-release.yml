@@ -84,5 +84,5 @@ jobs:
         commit: ${{ env.TAG_BRANCH }}
         token: ${{ secrets.PAT }}
         #body: Body
-        bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.txt
+        bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.md
         artifacts: ${{ env.FILES }}/*
