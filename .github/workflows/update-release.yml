@@ -19,7 +19,6 @@ on:
 #    types: started
 
 env:
-  UPLOAD_FILES: false
   TZ: Asia/Shanghai
   CURL_COMMAND: 'curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json"'
   CURL_DOWNLOAD_COMMAND: 'curl -vLJO -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/octet-stream"'
@@ -40,7 +39,7 @@ jobs:
       fail-fast: false
       matrix:
         list:
-        - { release_name: "Repos", tag_name: "20210521_IPv6", url: "https://api.github.com/repos/Ausaci/Archives/releases/43324999" }
+        - { release_name: "Repos", tag_name: "20210521_IPv6" }
         
 
     steps:
@@ -48,18 +47,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Download Files
-      id: download
+    - name: Initial environments
       run: |
         sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
         sudo chmod 777 /workdir/downloads
         sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
         cd /workdir/downloads/${{ matrix.list.release_name }}
-        #sudo ${{ env.CURL_DOWNLOAD_COMMAND }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep assets_url | cut -d '"' -f 4)
+        echo "FILES=$PWD" >> $GITHUB_ENV
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
-        #echo "::set-output name=status::success"
+        echo "::set-output name=status::success"
         
     - name: Download all Release
+      id: download
       uses: cb80/dlassets@latest
       with:
         tag: ${{ matrix.list.tag_name }}
@@ -67,24 +66,16 @@ jobs:
         to: /workdir/downloads/${{ matrix.list.release_name }}
         token: ${{ secrets.SOURCE_TOKEN_AUSACI }}
 
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
-    - name: Organize Files
-      id: organize
-      if: steps.download.outputs.status == 'success' && !cancelled()
-      run: |
-        cd /workdir/downloads/${{ matrix.list.release_name }}
-        echo "FILES=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
-
-    - name: Upload Files
-      uses: actions/upload-artifact@master
-      if: env.UPLOAD_FILES == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: ${{ env.RELEASE_NAME }}
-        path: ${{ env.FILES }}
-
-    - name: Create release
+    - name: Upload to release
       id: release
+      if: steps.download.outputs.status == 'success' && !cancelled()
       uses: ncipollo/release-action@v1
       with:
         name: ${{ matrix.list.release_name }}
