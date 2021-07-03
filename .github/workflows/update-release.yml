@@ -40,11 +40,11 @@ jobs:
       matrix:
         include:
           - { release_name: "Repos", tag_name: "20210521_IPv6", url: "https://api.github.com/repos/Ausaci/Archives/releases/43324999" }
-          #- { release_name: "NerdVPS", tag_name: "20210518_NerdVPS", url: "https://api.github.com/repos/Ausaci/Archives/releases/43150276" }
-          #- { release_name: "Config", tag_name: "Config", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372406" }
-          #- { release_name: "ddbr_files", tag_name: "ddbr", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372711" }
-          #- { release_name: "Tools", tag_name: "Tools", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372443" }
-          #- { release_name: "Openwrt_HP_Printer", tag_name: "HP_Printer", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372478" }
+          - { release_name: "NerdVPS", tag_name: "20210518_NerdVPS", url: "https://api.github.com/repos/Ausaci/Archives/releases/43150276" }
+          - { release_name: "Config", tag_name: "Config", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372406" }
+          - { release_name: "ddbr_files", tag_name: "ddbr", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372711" }
+          - { release_name: "Tools", tag_name: "Tools", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372443" }
+          - { release_name: "Openwrt_HP_Printer", tag_name: "HP_Printer", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372478" }
         
     steps:
       
