@@ -53,6 +53,7 @@ jobs:
         sudo chmod 777 /workdir/downloads
         sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
         cd /workdir/downloads/${{ matrix.list.release_name }}
+        #sudo wget -P /workdir/downloads/${{ matrix.list.release_name }} --http-user=${{ secrets.WGET_USER }} --http-password=${{ secrets.WGET_PASSWD }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
         sudo ${{ env.CURL_COMMAND }} -O $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
         echo "::set-output name=status::success"
