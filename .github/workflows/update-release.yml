@@ -61,7 +61,7 @@ jobs:
       id: organize
       if: steps.download.outputs.status == 'success' && !cancelled()
       run: |
-        cd /workdir/downloads
+        cd /workdir/downloads/${{ matrix.list.release_name }}
         echo "FILES=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
