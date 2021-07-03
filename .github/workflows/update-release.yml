@@ -62,7 +62,7 @@ jobs:
     - uses: robinraju/release-downloader@v1
       with: 
           repository: "${{ env.SOURCE_REPO }}"
-          latest: true
+          #latest: true # latest=true and tag can't coexist
           tag: "${{ matrix.list.tag_name }}"
           fileName: ""
           tarBall: true
