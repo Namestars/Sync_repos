@@ -52,7 +52,7 @@ jobs:
         sudo mkdir -p /workdir/downloads
         sudo chmod 777 /workdir/downloads
         cd /workdir/downloads
-        sudo wget -P /workdir/downloads/${{ matrix.list.release_name }} $(${{ env.CURL_COMMAND }} ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
+        sudo wget -P /workdir/downloads/${{ matrix.list.release_name }} --header="Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" $(${{ env.CURL_COMMAND }} ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) > /workdir/BODY_${{ matrix.list.release_name }}.txt
         echo "::set-output name=status::success"
         
