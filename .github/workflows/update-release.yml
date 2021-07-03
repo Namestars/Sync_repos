@@ -23,6 +23,7 @@ env:
   TZ: Asia/Shanghai
   CURL_COMMAND: 'curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json"'
   CURL_DOWNLOAD_COMMAND: 'curl -vLJO -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/octet-stream"'
+  SOURCE_REPO: Ausaci/Archives
   OWNER: Namestars
   REPO: Archives
   TAG_BRANCH: master
@@ -51,12 +52,23 @@ jobs:
       id: download
       run: |
         sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
-        sudo chmod 777 /workdir/downloads
-        sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
-        cd /workdir/downloads/${{ matrix.list.release_name }}
-        sudo ${{ env.CURL_DOWNLOAD_COMMAND }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep assets_url | cut -d '"' -f 4)
+        #sudo chmod 777 /workdir/downloads
+        #sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
+        #cd /workdir/downloads/${{ matrix.list.release_name }}
+        #sudo ${{ env.CURL_DOWNLOAD_COMMAND }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep assets_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
-        echo "::set-output name=status::success"
+        #echo "::set-output name=status::success"
+        
+    - uses: robinraju/release-downloader@v1
+      with: 
+          repository: "${{ env.SOURCE_REPO }}"
+          latest: true
+          tag: "${{ matrix.list.tag_name }}"
+          fileName: ""
+          tarBall: true
+          zipBall: true
+          out-file-path: "/workdir/downloads/${{ matrix.list.release_name }}"
+          token: "${{ secrets.SOURCE_TOKEN_AUSACI }}"
         
     - name: Organize Files
       id: organize
