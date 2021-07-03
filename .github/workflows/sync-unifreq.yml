@@ -17,7 +17,7 @@ env:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
-    if: github.event.sender.id == 'Ausaci' || github.event.repository.owner.id == github.event.sender.id
+    if: github.event.sender.id == "Ausaci" || github.event.repository.owner.id == github.event.sender.id
     
     name: Sync ${{ matrix.list }}
     strategy:
