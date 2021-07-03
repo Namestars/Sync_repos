@@ -64,7 +64,7 @@ jobs:
           repository: "${{ env.SOURCE_REPO }}"
           #latest: true # latest=true and tag can't coexist
           tag: "${{ matrix.list.tag_name }}"
-          fileName: "*"
+          fileName: "01-20210521-freenom.zip"
           tarBall: false
           zipBall: false
           out-file-path: "/workdir/downloads/${{ matrix.list.release_name }}"
