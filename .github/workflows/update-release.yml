@@ -1,6 +1,6 @@
 # Ausaci CopyRight
 
-name: Upload2Armbian_Buster
+name: Update Archives Release
 
 on:
   repository_dispatch:
