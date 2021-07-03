@@ -49,9 +49,9 @@ jobs:
     - name: Download Files
       id: download
       run: |
-        sudo mkdir -p /workdir/downloads/${{ release_name }}
+        sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
         sudo chmod 777 /workdir/downloads
-        sudo chmod 777 /workdir/downloads/${{ release_name }}
+        sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
         cd /workdir/downloads/${{ release_name }}
         sudo ${{ env.CURL_COMMAND }} -O $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep browser_download_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) > /workdir/BODY_${{ matrix.list.release_name }}.txt
