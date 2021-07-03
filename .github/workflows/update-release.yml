@@ -54,21 +54,19 @@ jobs:
         sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
         sudo chmod 777 /workdir/downloads
         sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
-        #cd /workdir/downloads/${{ matrix.list.release_name }}
+        cd /workdir/downloads/${{ matrix.list.release_name }}
         #sudo ${{ env.CURL_DOWNLOAD_COMMAND }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep assets_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
         #echo "::set-output name=status::success"
         
-    - uses: robinraju/release-downloader@v1
-      with: 
-          repository: "${{ env.SOURCE_REPO }}"
-          #latest: true # latest=true and tag can't coexist
-          tag: "${{ matrix.list.tag_name }}"
-          fileName: "01-20210521-freenom.zip"
-          tarBall: false
-          zipBall: false
-          out-file-path: "/workdir/downloads/${{ matrix.list.release_name }}"
-          token: "${{ secrets.SOURCE_TOKEN_AUSACI }}"
+    - name: Download Release
+      uses: Legion2/download-release-action@v2.1.0
+      with:
+        repository: ${{ env.SOURCE_REPO }}
+        tag: ${{ matrix.list.tag_name }}
+        path: ${{ matrix.list.tag_name }}
+        file: .*
+        token: ${{ secrets.SOURCE_TOKEN_AUSACI }}
         
     - name: Organize Files
       id: organize
