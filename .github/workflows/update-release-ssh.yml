@@ -1,6 +1,6 @@
 # Ausaci CopyRight
 
-name: Update Archives Release
+name: Update Archives Release use ssh
 
 on:
   repository_dispatch:
