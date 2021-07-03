@@ -1,7 +1,7 @@
 # File: .github/workflows/repo-sync.yml
 # Need add secrets.PAT
 
-name: repo-sync-unifreq
+name: repo-sync-Ausaci
 on:
   workflow_dispatch:
  # schedule:
