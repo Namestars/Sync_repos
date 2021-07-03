@@ -81,7 +81,7 @@ jobs:
         repo: ${{ env.REPO }}
         tag: ${{ matrix.list.tag_name }}
         commit: ${{ env.TAG_BRANCH }}
-        token: ${{ secrets.RELEASES_TOKEN }}
+        token: ${{ secrets.PAT }}
         #body: Body
         bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.txt
         artifacts: ${{ env.FILES }}/*
