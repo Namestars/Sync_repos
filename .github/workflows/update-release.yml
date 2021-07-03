@@ -34,17 +34,17 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     
-    name: Update ${{ matrix.list.release_name }}
+    name: Update ${{ matrix.release_name }}
     strategy:
       fail-fast: false
       matrix:
-        list:
-        - { release_name: "Repos", tag_name: "20210521_IPv6" }
-        - { release_name: "NerdVPS", tag_name: "20210518_NerdVPS" }
-        - { release_name: "Config", tag_name: "Config" }
-        - { release_name: "ddbr_files", tag_name: "ddbr" }
-        - { release_name: "Tools", tag_name: "Tools" }
-        - { release_name: "Openwrt_HP_Printer", tag_name: "HP_Printer" }
+        include:
+          - { release_name: "Repos", tag_name: "20210521_IPv6", url: "https://api.github.com/repos/Ausaci/Archives/releases/43324999" }
+          #- { release_name: "NerdVPS", tag_name: "20210518_NerdVPS", url: "https://api.github.com/repos/Ausaci/Archives/releases/43150276" }
+          #- { release_name: "Config", tag_name: "Config", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372406" }
+          #- { release_name: "ddbr_files", tag_name: "ddbr", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372711" }
+          #- { release_name: "Tools", tag_name: "Tools", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372443" }
+          #- { release_name: "Openwrt_HP_Printer", tag_name: "HP_Printer", url: "https://api.github.com/repos/Ausaci/Archives/releases/39372478" }
         
     steps:
       
@@ -53,21 +53,21 @@ jobs:
 
     - name: Initial environments
       run: |
-        sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
+        sudo mkdir -p /workdir/downloads/${{ matrix.release_name }}
         sudo chmod 777 /workdir/downloads
-        sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
-        cd /workdir/downloads/${{ matrix.list.release_name }}
+        sudo chmod 777 /workdir/downloads/${{ matrix.release_name }}
+        cd /workdir/downloads/${{ matrix.release_name }}
         echo "FILES=$PWD" >> $GITHUB_ENV
-        echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
+        echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.release_name }}.md
         echo "::set-output name=status::success"
         
     - name: Download all Release
       id: download
       uses: cb80/dlassets@latest
       with:
-        tag: ${{ matrix.list.tag_name }}
+        tag: ${{ matrix.tag_name }}
         repo: ${{ env.SOURCE_REPO }}
-        to: /workdir/downloads/${{ matrix.list.release_name }}
+        to: /workdir/downloads/${{ matrix.release_name }}
         token: ${{ secrets.SOURCE_TOKEN_AUSACI }}
         
     - name: SSH connection to Actions
@@ -81,13 +81,13 @@ jobs:
       id: release
       uses: ncipollo/release-action@v1
       with:
-        name: ${{ matrix.list.release_name }}
+        name: ${{ matrix.release_name }}
         allowUpdates: true
         owner: ${{ env.OWNER }}
         repo: ${{ env.REPO }}
-        tag: ${{ matrix.list.tag_name }}
+        tag: ${{ matrix.tag_name }}
         commit: ${{ env.TAG_BRANCH }}
         token: ${{ secrets.PAT }}
         #body: Body
-        bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.md
-        artifacts: /workdir/downloads/${{ matrix.list.release_name }}/*
+        bodyFile: /workdir/BODY_${{ matrix.release_name }}.md
+        artifacts: /workdir/downloads/${{ matrix.release_name }}/*
