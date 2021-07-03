@@ -21,7 +21,7 @@ on:
 env:
   UPLOAD_FILES: false
   TZ: Asia/Shanghai
-  CURL_COMMAND: curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json" -fsSL 
+  CURL_COMMAND: 'curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json" -fsSL '
   OWNER: Namestars
   REPO: Archives
   TAG_BRANCH: main
@@ -32,11 +32,14 @@ jobs:
   update-release:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
+    
+    name: Update ${{ matrix.list.release_name }}
     strategy:
       fail-fast: false
       matrix:
         list:
         - { release_name: "Repos", tag_name: "20210521_IPv6", url: "https://api.github.com/repos/Ausaci/Archives/releases/43324999" }
+        
 
     steps:
       
