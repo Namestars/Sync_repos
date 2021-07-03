@@ -59,14 +59,14 @@ jobs:
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
         #echo "::set-output name=status::success"
         
-    - name: Download Release
-      uses: Legion2/download-release-action@v2.1.0
+    - name: Download all Release
+      uses: cb80/dlassets@latest
       with:
-        repository: ${{ env.SOURCE_REPO }}
         tag: ${{ matrix.list.tag_name }}
-        path: ${{ matrix.list.tag_name }}
-        file: .*
+        repo: ${{ env.SOURCE_REPO }}
+        to: /workdir/downloads/${{ matrix.list.release_name }}
         token: ${{ secrets.SOURCE_TOKEN_AUSACI }}
+
         
     - name: Organize Files
       id: organize
