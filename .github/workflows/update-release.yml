@@ -96,4 +96,4 @@ jobs:
         token: ${{ secrets.PAT }}
         #body: Body
         bodyFile: /workdir/BODY_${{ matrix.list.release_name }}.md
-        artifacts: ${{ env.FILES }}/*
+        artifacts: /workdir/downloads/${{ matrix.list.release_name }}/*
