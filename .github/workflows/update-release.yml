@@ -52,8 +52,8 @@ jobs:
       id: download
       run: |
         sudo mkdir -p /workdir/downloads/${{ matrix.list.release_name }}
-        #sudo chmod 777 /workdir/downloads
-        #sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
+        sudo chmod 777 /workdir/downloads
+        sudo chmod 777 /workdir/downloads/${{ matrix.list.release_name }}
         #cd /workdir/downloads/${{ matrix.list.release_name }}
         #sudo ${{ env.CURL_DOWNLOAD_COMMAND }} $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep assets_url | cut -d '"' -f 4)
         echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.list.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.list.release_name }}.md
@@ -65,8 +65,8 @@ jobs:
           #latest: true # latest=true and tag can't coexist
           tag: "${{ matrix.list.tag_name }}"
           fileName: ""
-          tarBall: true
-          zipBall: true
+          tarBall: false
+          zipBall: false
           out-file-path: "/workdir/downloads/${{ matrix.list.release_name }}"
           token: "${{ secrets.SOURCE_TOKEN_AUSACI }}"
         
