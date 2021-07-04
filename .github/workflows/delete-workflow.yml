@@ -1,0 +1,38 @@
+name: sync-repo
+
+on:
+  workflow_dispatch:
+  #schedule:
+    #- cron: '00 16 * * *'
+
+env:
+  TZ: Asia/Shanghai
+  USE_SSH: true
+  
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    
+    steps:
+    - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          
+    - name: Initial environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo timedatectl set-timezone "$TZ"
+        git config --global user.name 'GitHub Actions' 
+        git config --global user.email 'noreply@github.com'
+        
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v1.2.3
+      with:          
+        token: ${{ secrets.AUTH_PAT }}
+        repository: ${{ github.repository }}
+        retain_days: 1
+        keep_minimum_runs: 5
+
+        
