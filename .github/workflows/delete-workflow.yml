@@ -1,4 +1,4 @@
-name: sync-repo
+name: Delete workflow runs
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-        with:
+      with:
           persist-credentials: false
           
     - name: Initial environment
