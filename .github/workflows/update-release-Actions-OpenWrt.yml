@@ -1,0 +1,96 @@
+# Ausaci CopyRight
+
+name: Update Actions-OpenWrt Release
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+#  schedule:
+#    - cron: 30 23 * * *
+#  release:
+#    types: published
+#  watch:
+#    types: started
+
+env:
+  TZ: Asia/Shanghai
+  CURL_COMMAND: 'curl -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/vnd.github.v3+json"'
+  CURL_DOWNLOAD_COMMAND: 'curl -vLJO -H "Authorization: token ${{ secrets.SOURCE_TOKEN_AUSACI }}" -H "Accept: application/octet-stream"'
+  SOURCE_REPO: HoldOnBro/Actions-OpenWrt
+  OWNER: Namestars
+  REPO: Actions-OpenWrt
+  TAG_BRANCH: master
+  TAG_NAME: your tag name
+  RELEASE_NAME: your release name
+
+jobs:
+  update-release:
+    runs-on: ubuntu-latest
+    if: github.event.sender.id == '54447830' || github.event.repository.owner.id == github.event.sender.id
+    
+    name: Update ${{ matrix.release_name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { release_name: "网上搜集的各种安卓电视和盒子专用的apk", tag_name: "TV_APKs", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/39511025" }
+          - { release_name: "ARMv8_tar_gz", tag_name: "Files4Build", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/34554768" }
+          - { release_name: "ARMv8_Bin", tag_name: "ARMv8", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/32396973" }
+          - { release_name: "J4125_Bin", tag_name: "J4125", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/31966463" }
+          - { release_name: "GDock_Bin", tag_name: "GDock-p2w_r619ac", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/28257941" }
+          - { release_name: "x86_64_Bin", tag_name: "x86_64", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/28257914" }
+          - { release_name: "NewifiD2_Bin", tag_name: "NewifiD2-MT7621", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/28257894" }
+          - { release_name: "NewifiD2_lite_Bin", tag_name: "NewifiD2_lite-MT7621", url: "https://api.github.com/repos/HoldOnBro/Actions-OpenWrt/releases/" }
+
+        
+    steps:
+      
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initial environments
+      run: |
+        sudo mkdir -p /workdir/downloads/${{ matrix.release_name }}
+        sudo chmod 777 /workdir/downloads
+        sudo chmod 777 /workdir/downloads/${{ matrix.release_name }}
+        cd /workdir/downloads/${{ matrix.release_name }}
+        echo "FILES=$PWD" >> $GITHUB_ENV
+        echo -e $(${{ env.CURL_COMMAND }} -fsSL ${{ matrix.url }} | grep body | cut -d '"' -f 4) | sudo tee /workdir/BODY_${{ matrix.release_name }}.md
+        echo "::set-output name=status::success"
+        
+    - name: Download all Release
+      id: download
+      uses: cb80/dlassets@latest
+      with:
+        tag: ${{ matrix.tag_name }}
+        repo: ${{ env.SOURCE_REPO }}
+        to: /workdir/downloads/${{ matrix.release_name }}
+        #token: ${{ secrets.SOURCE_TOKEN }}
+        
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        
+    - name: Upload to release
+      id: release
+      uses: ncipollo/release-action@v1
+      with:
+        name: ${{ matrix.release_name }}
+        allowUpdates: true
+        owner: ${{ env.OWNER }}
+        repo: ${{ env.REPO }}
+        tag: ${{ matrix.tag_name }}
+        commit: ${{ env.TAG_BRANCH }}
+        token: ${{ secrets.PAT }}
+        #body: Body
+        bodyFile: /workdir/BODY_${{ matrix.release_name }}.md
+        artifacts: /workdir/downloads/${{ matrix.release_name }}/*
