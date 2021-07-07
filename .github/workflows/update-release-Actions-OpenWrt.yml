@@ -25,7 +25,7 @@ env:
   SOURCE_REPO: HoldOnBro/Actions-OpenWrt
   OWNER: Namestars
   REPO: Actions-OpenWrt
-  TAG_BRANCH: master
+  TAG_BRANCH: main
   TAG_NAME: your tag name
   RELEASE_NAME: your release name
 
