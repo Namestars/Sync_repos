@@ -1,72 +1,73 @@
-# File: .github/workflows/repo-sync.yml
-# Need add secrets.PAT
+#
+# Copyright (c) 2019-2021 Samuel <https://github.com/Ausaci>
+#
+# Description: Auto git clone repos and push to destination repo
+#
+# If you want to checkout the private repos, please add secrets in repo settings first:
+# 
+# For "svn checkout --force ${{ env.URL_PREFIX }}${{ env.DOWNLOAD_URL }} ${{ env.DOWNLOAD_PATH }} --username ${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }}"
+# ${{ secrets.USERNAME }}    ----    Github username
+# ${{ secrets.PASSWORD }}    ----    Github token
+#
+# For "curl -O ${{ env.URL_PREFIX }}${{ secrets.PAT }}@${{ env.DOWNLOAD_URL }}"
+# ${{ secrets.SOURCEPAT }}    ----    Github token [access for repo] <https://github.com/settings/tokens>
+#
+# For "git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ secrets.SOURCEPAT }}@${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}"
+# ${{ secrets.SOURCEPAT }}    ----    Github token [access for repo] <https://github.com/settings/tokens>
+#
+# ${{ secrets.PAT }} is your DEST repo's access token
+#
 
-name: repo-sync-Holdonbro
+name: sync-Actions-OpenWrt
+
 on:
   workflow_dispatch:
- # schedule:
-   # - cron: '0 1 * * 1'
-    # UTC时区，比我们东八区早，上面示例为：每周一9点。
-    
+  #schedule:
+    #- cron: '00 16 * * *'
+
 env:
   TZ: Asia/Shanghai
-  TOCURRENT: false
-  TOREMOTE: true
-  SOUECE_OWNER: HoldOnBro
-  DEST_OWNER: Namestars
-  SYNCTAGS: true
+  USE_SSH: false
+  URL_PREFIX: https://
+  SOURCE_REPO: github.com/HoldOnBro/Actions-OpenWrt.git
+  SOURCE_BRANCH: master
+  DEST_REPO: Namestars/Actions-OpenWrt
+  DEST_BRANCH: master
+  CLONEDIR: clonedir
   
 jobs:
-  repo-sync:
+  sync-repo-ssh_key:
     runs-on: ubuntu-latest
-    if: github.event.sender.id == '54447830' || github.event.repository.owner.id == github.event.sender.id
-    
-    name: Sync ${{ matrix.list }}
-    strategy:
-      fail-fast: false
-      matrix:
-        list: [Actions-OpenWrt]
-        
-    steps:  
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+    if: github.event.repository.owner.id == github.event.sender.id
 
-      - name: repo-sync-current      
-        uses: repo-sync/github-sync@v2
-        if: env.TOCURRENT == 'true'
-        with:
-          source_repo: "https://github.com/template/template.git"
-          source_branch: "master"
-          destination_branch: "master"
-          sync_tags: "false"
-          github_token: ${{ secrets.PAT }}
-          
-      - name: git-sync-remote-branch
-        uses: wei/git-sync@v3.0.0
-        if: env.TOREMOTE == 'true'
-        with:
-          source_repo: "${{ env.SOUECE_OWNER }}/${{ matrix.list }}"
-          source_branch: "refs/remotes/source/*"
-          #source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.list }}"
-          destination_branch: "refs/heads/*"
-          #destination_branch: "refs/tags/*"          
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
-          source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
-          destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
-          
-      - name: git-sync-remote-tags
-        uses: wei/git-sync@v3.0.0
-        if: env.TOREMOTE == 'true' && env.SYNCTAGS == 'true'
-        with:
-          source_repo: "${{ env.SOUECE_OWNER }}/${{ matrix.list }}"
-          #source_branch: "refs/remotes/source/*"
-          source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.list }}"
-          #destination_branch: "refs/heads/*"
-          destination_branch: "refs/tags/*"          
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
-          source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
-          destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
-          
+    steps:
+    
+    - name: Initial environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo timedatectl set-timezone "$TZ"
+        git config --global user.name 'GitHub Actions' 
+        git config --global user.email 'noreply@github.com'
+        
+    - name: SSH to source repo
+      if: env.USE_SSH == 'true'
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitee.com > ~/.ssh/known_hosts
+        ssh-keyscan github.com > ~/.ssh/known_hosts
+        
+    - name: Clone source repo
+      run: |
+        git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
+        #git clone -b ${{ env.SOURCE_BRANCH }} ${{ env.URL_PREFIX }}${{ secrets.SOURCEPAT }}@${{ env.SOURCE_REPO }} ${{ env.CLONEDIR }}
+        
+    - name: Push to destination repo
+      uses: ad-m/github-push-action@master
+      with:
+        directory: ${{ env.CLONEDIR }}
+        github_token: ${{ secrets.PAT }}
+        repository: ${{ env.DEST_REPO }}
+        branch: ${{ env.DEST_BRANCH }}
