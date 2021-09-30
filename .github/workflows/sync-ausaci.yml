@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [Archives]
+        list: [Archives,Scripts,EUserv,EUserv_extend_TencentSCF,gimls,Biliserver,Nameserver,IBM_V2,luci-app-nat6-helper]
         
     steps:  
       - uses: actions/checkout@v2
