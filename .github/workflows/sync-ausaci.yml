@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [Archives,Scripts,EUserv,EUserv_extend_TencentSCF,gimls,Biliserver,Nameserver,IBM_V2,luci-app-nat6-helper]
+        list: [Archives,Scripts,EUserv,EUserv_extend_TencentSCF,gimls,Biliserver,Nameserver,IBM_V2,luci-app-nat6-helper,OpenWrt-Actions-Ausaci]
         
     steps:  
       - uses: actions/checkout@v2
