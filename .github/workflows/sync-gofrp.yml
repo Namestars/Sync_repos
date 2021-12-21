@@ -1,7 +1,7 @@
 # File: .github/workflows/repo-sync.yml
 # Need add secrets.PAT
 
-name: repo-sync-Ausaci-Archives
+name: repo-sync-gofrp
 on:
   workflow_dispatch:
  # schedule:
