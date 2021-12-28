@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [openwrt_packit,arm64-kernel-configs,libreoffice-headless,linux-5.4.y,linux-5.10.y,linux-5.12.y]
+        list: [openwrt_packit,arm64-kernel-configs,libreoffice-headless,linux-5.4.y,linux-5.10.y,linux-5.12.y,linux-5.13.y,linux-5.14.y,linux-5.15.y]
         
     steps:  
       - uses: actions/checkout@v2
