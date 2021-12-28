@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: sync-arloor
+name: repo-sync-arloor
 on:
   workflow_dispatch:
  # schedule:
@@ -19,7 +19,7 @@ env:
 jobs:
   sync-current_remote-repo:
     runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id
+    if: github.event.sender.id == '54447830' || github.event.repository.owner.id == github.event.sender.id
     
     name: Sync ${{ matrix.list }}
     strategy:
