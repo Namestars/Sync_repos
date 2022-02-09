@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-klever1988
+name: repo-sync-github-sync-repos
 on:
   workflow_dispatch:
  # schedule:
