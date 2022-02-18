@@ -79,7 +79,7 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        
+
     - name: Upload to release
       id: release
       uses: ncipollo/release-action@v1
@@ -95,12 +95,11 @@ jobs:
         bodyFile: /workdir/BODY_${{ matrix.release_name }}.md
         artifacts: /workdir/downloads/${{ matrix.release_name }}/*
 
-      - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@v1.2.3
-        with:          
-          token: ${{ secrets.PAT }}
-          repository: ${{ github.repository }}
-          retain_days: 30
-          keep_minimum_runs: 1
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v1.2.3
+      with:          
+        token: ${{ secrets.PAT }}
+        repository: ${{ github.repository }}
+        retain_days: 30
+        keep_minimum_runs: 1
           
-
