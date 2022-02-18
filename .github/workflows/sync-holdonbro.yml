@@ -71,3 +71,13 @@ jobs:
         github_token: ${{ secrets.PAT }}
         repository: ${{ env.DEST_REPO }}
         branch: ${{ env.DEST_BRANCH }}
+        
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v1.2.3
+      with:          
+        token: ${{ secrets.PAT }}
+        repository: ${{ github.repository }}
+        retain_days: 30
+        keep_minimum_runs: 1
+          
+
