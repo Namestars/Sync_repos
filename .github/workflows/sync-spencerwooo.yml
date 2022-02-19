@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [onedrive-vercel-index,onedrive-cf-index]
+        list: [onedrive-vercel-index,onedrive-vercel-index-docs,onedrive-cf-index]
         
     steps:  
       - uses: actions/checkout@v2
