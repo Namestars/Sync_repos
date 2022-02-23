@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-RayWangQvQ-Bili
+name: repo-sync-fscarmen-tools
 on:
   workflow_dispatch:
  # schedule:
