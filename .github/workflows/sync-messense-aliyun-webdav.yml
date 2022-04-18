@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [aliyundrive-webdav]
+        list: [aliyundrive-webdav,aliyundrive-fuse]
         
     steps:  
       - uses: actions/checkout@v2
