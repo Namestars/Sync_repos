@@ -26,7 +26,9 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        list: [Actions-OpenWrt,openwrt-list,GeoLite.mmdb,warp.sh,wireguard-go-builder,Aria2-Pro-Core,ariang,aria2.sh,aria2.conf,Gitpod-OpenWrt,openwrt-build-env,ssh2actions,cloudflare-ddns-script,SSH_Key_Installer,termux.sh,ca-certificates.crt,goindex_backup]
+        list: [Actions-OpenWrt,GeoLite.mmdb,warp.sh,wireguard-go-builder,Aria2-Pro-Docker,Aria2-Pro-Core,ariang,aria2.sh,aria2.conf,ca-certificates.crt]
+        # Not updated repos
+        # [Gitpod-OpenWrt,openwrt-list,cloudflare-ddns-script,openwrt-build-env,ssh2actions,SSH_Key_Installer,termux.sh,goindex_backup]
         
     steps:  
       - uses: actions/checkout@v2
