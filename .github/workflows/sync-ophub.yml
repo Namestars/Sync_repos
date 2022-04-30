@@ -25,7 +25,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [amlogic-s9xxx-openwrt,flippy-openwrt-actions,amlogic-s9xxx-armbian,script,luci-app-amlogic,kernel,op]
+        list: [amlogic-s9xxx-openwrt,flippy-openwrt-actions,amlogic-s9xxx-armbian,luci-app-amlogic,kernel]
+        # Deleted repos
+        # [script,op]
         
     steps:  
       - uses: actions/checkout@v2
