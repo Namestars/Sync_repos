@@ -15,7 +15,7 @@ env:
   SYNCTAGS: true
   SOURCE_OWNER: zerotier
   DEST_OWNER: Namestars
-  KAAASS: true
+  KAAASS: false
   
 jobs:
   sync-current_remote-repo:
