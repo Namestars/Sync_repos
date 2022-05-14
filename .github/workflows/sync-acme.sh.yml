@@ -28,7 +28,8 @@ jobs:
       fail-fast: false
       matrix:
         # 3. Need Change Here!
-        list: [acme.sh,get.acme.sh]
+        list: [acme.sh]
+        # get.acme.sh
         
     steps:  
       - uses: actions/checkout@v2
