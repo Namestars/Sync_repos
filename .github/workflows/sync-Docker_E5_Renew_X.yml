@@ -1,7 +1,8 @@
-# File: .github/workflows/Auto_sync_remote_repo_Template.yml
+# File: .github/workflows/sync-souce-owner-repo-template.yml
 # Need add secrets.PAT
 
-name: repo-sync-hongyonghan_Docker_E5
+# 1. Need Change Here!
+name: repo-sync-E5-Docker
 on:
   workflow_dispatch:
  # schedule:
@@ -13,7 +14,7 @@ env:
   TOCURRENT: false
   TOREMOTE: true
   SYNCTAGS: true
-  SOURCE_OWNER: hongyonghan
+  # SOURCE_OWNER: ChangeMe
   DEST_OWNER: Namestars
   
 jobs:
@@ -21,11 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.sender.id == '54447830' || github.event.repository.owner.id == github.event.sender.id
     
-    name: Sync ${{ matrix.list }}
+    name: Sync ${{ matrix.souce_owner }}
     strategy:
       fail-fast: false
       matrix:
-        list: [Docker_Microsoft365_E5_Renew_X]
+        include:
+          # 2. Need Change Here!
+          # - { souce_owner: "source_owner", list: "repo" }
+          - { souce_owner: "hongyonghan", list: "Docker_Microsoft365_E5_Renew_X" }
+          - { souce_owner: "Gladtbam", list: "ms365_e5_renewx" }
         
     steps:  
       - uses: actions/checkout@v2
@@ -36,7 +41,7 @@ jobs:
         uses: repo-sync/github-sync@v2
         if: env.TOCURRENT == 'true'
         with:
-          source_repo: "https://github.com/${{ env.SOURCE_OWNER }}/${{ matrix.list }}.git"
+          source_repo: "https://github.com/${{ matrix.souce_owner }}/${{ matrix.list }}.git"
           source_branch: "master"
           destination_branch: "master"
           sync_tags: "false"
@@ -46,10 +51,10 @@ jobs:
         uses: wei/git-sync@v3.0.0
         if: env.TOREMOTE == 'true'
         with:
-          source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
+          source_repo: "${{ matrix.souce_owner }}/${{ matrix.list }}"
           source_branch: "refs/remotes/source/*"
           #source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.souce_owner }}_${{ matrix.list }}"
           destination_branch: "refs/heads/*"
           #destination_branch: "refs/tags/*"          
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
@@ -60,10 +65,10 @@ jobs:
         uses: wei/git-sync@v3.0.0
         if: env.TOREMOTE == 'true' && env.SYNCTAGS == 'true'
         with:
-          source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
+          source_repo: "${{ matrix.souce_owner }}/${{ matrix.list }}"
           #source_branch: "refs/remotes/source/*"
           source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.souce_owner }}_${{ matrix.list }}"
           #destination_branch: "refs/heads/*"
           destination_branch: "refs/tags/*"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
