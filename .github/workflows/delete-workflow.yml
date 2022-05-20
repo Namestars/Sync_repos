@@ -28,7 +28,7 @@ jobs:
         git config --global user.email 'noreply@github.com'
         
     - name: Delete workflow runs
-      uses: Mattraks/delete-workflow-runs@v1.2.3
+      uses: Mattraks/delete-workflow-runs@v2.0.1
       with:          
         token: ${{ secrets.PAT }}
         repository: ${{ github.repository }}
