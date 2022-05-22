@@ -25,7 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [v2ray-agent,gfwlist,Profiles]
+        list: [v2ray-agent,gfwlist]
+        # [Profiles]
         
     steps:  
       - uses: actions/checkout@v2
@@ -49,7 +50,7 @@ jobs:
           source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
           source_branch: "refs/remotes/source/*"
           #source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
           destination_branch: "refs/heads/*"
           #destination_branch: "refs/tags/*"          
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
@@ -63,7 +64,7 @@ jobs:
           source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
           #source_branch: "refs/remotes/source/*"
           source_branch: "refs/tags/*"
-          destination_repo: "${{ env.DEST_OWNER }}/${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
           #destination_branch: "refs/heads/*"
           destination_branch: "refs/tags/*"          
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
