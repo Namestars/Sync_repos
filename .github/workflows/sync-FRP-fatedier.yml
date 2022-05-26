@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-MvsCode-frps-onekey
+name: repo-sync-FRP-fatedier
 on:
   workflow_dispatch:
  # schedule:
@@ -13,7 +13,7 @@ env:
   TOCURRENT: false
   TOREMOTE: true
   SYNCTAGS: true
-  SOURCE_OWNER: MvsCode
+  SOURCE_OWNER: fatedier
   DEST_OWNER: Namestars
   
 jobs:
@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [frps-onekey]
+        list: [frp]
         
     steps:  
       - uses: actions/checkout@v2
@@ -78,4 +78,3 @@ jobs:
           retain_days: 30
           keep_minimum_runs: 1
           
-
