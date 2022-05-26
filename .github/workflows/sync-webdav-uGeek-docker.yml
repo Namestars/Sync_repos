@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-fscarmen-tools
+name: repo-sync-webdav-uGeek
 on:
   workflow_dispatch:
  # schedule:
@@ -13,7 +13,7 @@ env:
   TOCURRENT: false
   TOREMOTE: true
   SYNCTAGS: true
-  SOURCE_OWNER: fscarmen
+  SOURCE_OWNER: uGeek
   DEST_OWNER: Namestars
   
 jobs:
@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [tools,warp,warp_unlock]
+        list: [docker-webdav]
         
     steps:  
       - uses: actions/checkout@v2
