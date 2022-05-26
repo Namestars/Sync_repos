@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-zyclonite-zt-docker
+name: repo-sync-ZT-zyclonite-docker
 on:
   workflow_dispatch:
  # schedule:

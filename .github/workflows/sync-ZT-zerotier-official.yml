@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-zerotier-official
+name: repo-sync-ZT-zerotier-official
 on:
   workflow_dispatch:
  # schedule:
