@@ -1,6 +1,7 @@
-# File: .github/workflows/repo-sync.yml
+# File: .github/workflows/sync-souce-owner-repo-template.yml
 # Need add secrets.PAT
 
+# 1. Need Change Here!
 name: repo-sync-unifreq
 on:
   workflow_dispatch:
@@ -13,9 +14,12 @@ env:
   TOCURRENT: false
   TOREMOTE: true
   SYNCTAGS: true
+  # 2. Need Change Here!
+  SOURCE_OWNER: unifreq
+  DEST_OWNER: Namestars
   
 jobs:
-  repo-sync:
+  sync-current_remote-repo:
     runs-on: ubuntu-latest
     if: github.event.sender.id == '54447830' || github.event.repository.owner.id == github.event.sender.id
     
@@ -23,6 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # 3. Need Change Here!
         list: [openwrt_packit,arm64-kernel-configs,libreoffice-headless,linux-5.4.y,linux-5.10.y,linux-5.12.y,linux-5.13.y,linux-5.14.y,linux-5.15.y]
         
     steps:  
@@ -34,7 +39,7 @@ jobs:
         uses: repo-sync/github-sync@v2
         if: env.TOCURRENT == 'true'
         with:
-          source_repo: "https://github.com/template/template.git"
+          source_repo: "https://github.com/${{ env.SOURCE_OWNER }}/${{ matrix.list }}.git"
           source_branch: "master"
           destination_branch: "master"
           sync_tags: "false"
@@ -44,28 +49,28 @@ jobs:
         uses: wei/git-sync@v3.0.0
         if: env.TOREMOTE == 'true'
         with:
-          source_repo: "unifreq/${{ matrix.list }}"
+          source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
           source_branch: "refs/remotes/source/*"
           #source_branch: "refs/tags/*"
-          destination_repo: "Namestars/${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
           destination_branch: "refs/heads/*"
           #destination_branch: "refs/tags/*"          
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
-          #source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
+          #source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY_SOURCE_OWNER }} # optional, will override `SSH_PRIVATE_KEY`
           destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
           
       - name: git-sync-remote-tags
         uses: wei/git-sync@v3.0.0
         if: env.TOREMOTE == 'true' && env.SYNCTAGS == 'true'
         with:
-          source_repo: "unifreq/${{ matrix.list }}"
+          source_repo: "${{ env.SOURCE_OWNER }}/${{ matrix.list }}"
           #source_branch: "refs/remotes/source/*"
           source_branch: "refs/tags/*"
-          destination_repo: "Namestars/${{ matrix.list }}"
+          destination_repo: "${{ env.DEST_OWNER }}/${{ env.SOURCE_OWNER }}_${{ matrix.list }}"
           #destination_branch: "refs/heads/*"
-          destination_branch: "refs/tags/*"          
+          destination_branch: "refs/tags/*"
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
-          #source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
+          #source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY_SOURCE_OWNER }} # optional, will override `SSH_PRIVATE_KEY`
           destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
           
       - name: Delete workflow runs
@@ -76,4 +81,3 @@ jobs:
           retain_days: 30
           keep_minimum_runs: 1
           
-
