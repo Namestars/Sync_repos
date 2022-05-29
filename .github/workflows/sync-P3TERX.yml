@@ -28,9 +28,9 @@ jobs:
       fail-fast: false
       matrix:
         # 3. Need Change Here!
-        list: [Actions-OpenWrt,GeoLite.mmdb,warp.sh,wireguard-go-builder,Aria2-Pro-Docker,Aria2-Pro-Core,ariang,aria2.sh,aria2.conf,ca-certificates.crt,BestTrace,IBM-CF-V2,Typecho-Theme-AriaX,Copyright-for-Typecho-Theme-AriaX,doubi_backup,ServerStatus-V,Gitpod-OpenWrt,openwrt-list,cloudflare-ddns-script,openwrt-build-env,ssh2actions,SSH_Key_Installer,termux.sh,goindex_backup]
+        list: [GeoLite.mmdb,warp.sh,wireguard-go-builder,Aria2-Pro-Docker,Aria2-Pro-Core,aria2.sh,aria2.conf,ca-certificates.crt,BestTrace]
         # Not updated repos
-        # [Gitpod-OpenWrt,openwrt-list,cloudflare-ddns-script,openwrt-build-env,ssh2actions,SSH_Key_Installer,termux.sh,goindex_backup]
+        # [ariang,IBM-CF-V2,Typecho-Theme-AriaX,Copyright-for-Typecho-Theme-AriaX,doubi_backup,ServerStatus-V,Actions-OpenWrt,Gitpod-OpenWrt,openwrt-list,openwrt-build-env,cloudflare-ddns-script,ssh2actions,SSH_Key_Installer,termux.sh,goindex_backup]
         
     steps:  
       - uses: actions/checkout@v2
