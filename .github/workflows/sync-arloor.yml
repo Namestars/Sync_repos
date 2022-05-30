@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         # 3. Need Change Here!
-        list: [iptablesUtils,nftables-nat-rust,HttpProxy,connect]
+        list: [iptablesUtils,nftables-nat-rust,HttpProxy,connect,forward,ddns]
         
     steps:  
       - uses: actions/checkout@v2
