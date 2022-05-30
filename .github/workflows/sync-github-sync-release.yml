@@ -31,6 +31,7 @@ jobs:
           # - { souce_owner: "source_owner", list: "repo" }
           - { souce_owner: "cb80", list: "dlassets" } # download a release
           - { souce_owner: "ncipollo", list: "release-action" } # generate a release
+          - { souce_owner: "dev-drprasad", list: "delete-older-releases" } # delete a release
         
     steps:  
       - uses: actions/checkout@v2
