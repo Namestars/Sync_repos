@@ -28,8 +28,9 @@ jobs:
       fail-fast: false
       matrix:
         # 3. Need Change Here!
-        list: [openwrt_packit,arm64-kernel-configs,libreoffice-headless,linux-5.4.y,linux-5.10.y,linux-5.12.y,linux-5.13.y,linux-5.14.y,linux-5.15.y]
-        
+        list: [openwrt_packit,arm64-kernel-configs,u-boot,amlogic-boot-fip,linux-5.4.y,linux-5.10.y,linux-5.15.y,linux-5.16.y,linux-5.17.y]
+        # Not Updated repos
+        # [libreoffice-headless,linux-5.12.y,linux-5.13.y,linux-5.14.y]
     steps:  
       - uses: actions/checkout@v2
         with:
