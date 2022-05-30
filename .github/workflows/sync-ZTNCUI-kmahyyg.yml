@@ -1,7 +1,7 @@
 # File: .github/workflows/Auto_sync_remote_repo_Template.yml
 # Need add secrets.PAT
 
-name: repo-sync-kmahyyg-ZTNCUI
+name: repo-sync-ZTNCUI-kmahyyg
 on:
   workflow_dispatch:
  # schedule:
