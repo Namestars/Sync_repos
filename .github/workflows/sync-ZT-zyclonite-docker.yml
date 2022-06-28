@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        list: [zerotier-docker]
+        list: [zerotier-docker,setup-podman]
         
     steps:  
       - uses: actions/checkout@v2
