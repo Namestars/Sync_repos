@@ -29,8 +29,8 @@ jobs:
         include:
           # 2. Need Change Here!
           # - { souce_owner: "source_owner", list: "repo" }
-          - { souce_owner: "source_owner_1", list: "repo1" }
-          - { souce_owner: "source_owner_2", list: "repo2" }
+          - { souce_owner: "", list: "" }
+          - { souce_owner: "", list: "" }
         
     steps:  
       - uses: actions/checkout@v2
