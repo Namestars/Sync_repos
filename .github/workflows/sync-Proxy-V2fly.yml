@@ -2,7 +2,7 @@
 # Need add secrets.PAT
 
 # 1. Need Change Here!
-name: repo-sync-Proxy-v2fly
+name: repo-sync-Proxy-V2fly
 on:
   workflow_dispatch:
  # schedule:
