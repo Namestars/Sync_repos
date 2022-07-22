@@ -29,7 +29,7 @@ jobs:
         include:
           # 2. Need Change Here!
           # - { souce_owner: "source_owner", list: "repo" }
-          - { souce_owner: "wy580477", list: "Heroku-All-In-One-APP" }
+          # - { souce_owner: "wy580477", list: "Heroku-All-In-One-APP" }
           - { souce_owner: "wy580477", list: "Leech-AIO-APP-EX" }
           - { souce_owner: "zizifn", list: "v2ray-heroku" }          
         
